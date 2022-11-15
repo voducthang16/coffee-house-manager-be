@@ -1,14 +1,10 @@
-const mongoose = require('mongoose');
-
-async function connect() {
-    try {
-        await mongoose.connect('mongodb://localhost:27017/coffee-house', {
-
-        })
-        console.log('Connected to MongoDB successfully')
-    } catch (e) {
-        console.log('Connected to MongoDB failed: ' + e.message)
-    }
-}
-
-module.exports = { connect }
+const config = {
+    db: {
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "coffee_house",
+    },
+    listPerPage: 2,
+};
+module.exports = config;

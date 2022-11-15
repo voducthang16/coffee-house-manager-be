@@ -1,18 +1,16 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const Product = require('../model/Product');
+const productServices = require("../services/productServices");
 // get all
-router.get('/', function(req, res, next) {
-    Product.find({}).populate('').exec((err, result) => {
-        if (err) throw err;
-        res.json(result);
-    })
-})
-
-router.post('/', function(req, res, next) {
-    const product = new Product(req.body);
-    product.save();
-    res.send(product);
-})
+router.get("/", async function (req, res, next) {
+    try {
+        res.json(await productServices.getAllProducts(req.query.page));
+    } catch (err) {
+        console.error(
+            `Error while getting programming languages ${err.message}`
+        );
+        next(err);
+    }
+});
 
 module.exports = router;

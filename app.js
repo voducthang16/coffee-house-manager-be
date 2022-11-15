@@ -9,6 +9,7 @@ var usersRouter = require("./routes/users");
 var projectsRouter = require("./routes/projects");
 var tasksRouter = require("./routes/tasks");
 var productRouter = require("./routes/products");
+var orderRouter = require("./routes/orders");
 
 var app = express();
 
@@ -16,10 +17,16 @@ var app = express();
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    res.header("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS");
+    res.header(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept"
+    );
+    res.header(
+        "Access-Control-Allow-Methods",
+        "GET, POST, PATCH, DELETE, OPTIONS"
+    );
     next();
 });
 
@@ -29,14 +36,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-const db = require("./config");
-db.connect();
-
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/projects", projectsRouter);
 app.use("/tasks", tasksRouter);
 app.use("/products", productRouter);
+app.use("/orders", orderRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
