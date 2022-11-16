@@ -1,19 +1,24 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const Order = require('../model/Order');
+const Order = require("../model/Order");
+const orderServices = require("../services/orderServices");
 // get all
-router.get('/', function(req, res, next) {
-    Order.find({}).populate('').exec((err, result) => {
-        if (err) throw err;
-        res.json(result);
-    })
-})
+router.get("/", async function (req, res, next) {
+    try {
+        res.json(await orderServices.getAllOrders(req.query.page));
+    } catch (err) {
+        console.error(`error while getting order ${err.message}`);
+        next(err);
+    }
+});
 
-router.post('/', function(req, res, next) {
-    const order = new Order(req.body);
-    console.log(order)
-    order.save();
-    res.send(order);
-})
+router.post("/", async function (req, res, next) {
+    try {
+        res.json(await orderServices.create(req.body));
+    } catch (err) {
+        console.error(`error while creating order`, err.message);
+        next(err);
+    }
+});
 
 module.exports = router;

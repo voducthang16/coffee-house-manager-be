@@ -5,6 +5,6 @@ const config = {
         password: "",
         database: "coffee_house",
     },
-    listPerPage: 2,
+    listPerPage: 6,
 };
 module.exports = config;
