@@ -17,8 +17,11 @@ async function getAllOrders(page = 1) {
 
 async function create(item) {
     const result = await db.query(
-        `INSERT INTO orders (user_id, client, type, table_id) 
-        VALUES (${item.user_id}, '${item.client}', ${item.type}, ${item.table_id})`
+        `INSERT INTO orders (user_id, client, total, discount, discount_reason, 
+        surcharge, surcharge_reason, tax, note, payment_type, table_id) 
+        VALUES (${item.user_id}, '${item.client}', ${item.total}, ${item.discount},
+        '${item.discount_reason}', ${item.surcharge}, '${item.surcharge_reason}', 
+        ${item.tax}, '${item.note}', ${item.payment_type}, ${item.table_id})`
     );
 
     let message = "error in creating order";
