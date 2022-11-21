@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const orderServices = require("../services/orderServices");
+const orderServices = require("../services/order");
 // get all
 router.get("/:id", async function (req, res, next) {
     const orderId = req.params.id;
