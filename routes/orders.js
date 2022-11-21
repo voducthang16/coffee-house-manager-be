@@ -12,11 +12,22 @@ router.get("/", async function (req, res, next) {
     }
 });
 
+// create order
 router.post("/", async function (req, res, next) {
     try {
         res.json(await orderServices.create(req.body));
     } catch (err) {
         console.error(`error while creating order`, err.message);
+        next(err);
+    }
+});
+
+// create order details
+router.post("/order-detail", async function (req, res, next) {
+    try {
+        res.json(await orderServices.createDetail(req.body));
+    } catch (err) {
+        console.error(`error while creating order detail`, err.message);
         next(err);
     }
 });

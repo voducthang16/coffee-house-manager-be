@@ -15,6 +15,7 @@ async function getAllOrders(page = 1) {
     };
 }
 
+// create order
 async function create(item) {
     const result = await db.query(
         `INSERT INTO orders (user_id, client, total, discount, discount_reason, 
@@ -25,27 +26,35 @@ async function create(item) {
     );
 
     let message = "error in creating order";
-
+    let success = false;
+    let id;
     if (result.affectedRows) {
         message = "order created successfully";
+        success = true;
+        [{ id }] = await db.query(
+            "SELECT id FROM orders ORDER BY id DESC LIMIT 0, 1;"
+        );
     }
 
-    return { message };
+    return { message, success, id };
 }
 
+// create order details
 async function createDetail(item) {
     const result = await db.query(
-        `INSERT INTO orders_detail (order_id, product_id, quantity, price) 
-        VALUES (${item.order_id}, ${item.product_id}, ${item.quantity}, ${item.price})`
+        `INSERT INTO orders_detail (order_id, product_id, quantity, total) 
+        VALUES (${item.order_id}, ${item.product_id}, ${item.quantity}, ${item.total})`
     );
 
     let message = "error in creating order detail";
+    let success = false;
 
     if (result.affectedRows) {
         message = "order detail created successfully";
+        success = true;
     }
 
-    return { message };
+    return { message, success };
 }
 
 async function getOrderDetail(page = 1, orderId) {
