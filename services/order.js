@@ -28,11 +28,15 @@ async function create(item) {
     let message = "error in creating order";
     let success = false;
     let id;
+    let table;
     if (result.affectedRows) {
         message = "order created successfully";
         success = true;
         [{ id }] = await db.query(
             "SELECT id FROM orders ORDER BY id DESC LIMIT 0, 1;"
+        );
+        table = await db.query(
+            `UPDATE tables SET status = '1' WHERE tables.id = ${item.table_id}`
         );
     }
 
