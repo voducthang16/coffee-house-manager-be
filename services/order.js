@@ -19,24 +19,20 @@ async function getAllOrders(page = 1) {
 async function create(item) {
     const result = await db.query(
         `INSERT INTO orders (user_id, client, total, discount, discount_reason, 
-        surcharge, surcharge_reason, tax, note, payment_type, table_id) 
+        surcharge, surcharge_reason, tax, note, payment_type) 
         VALUES (${item.user_id}, '${item.client}', ${item.total}, ${item.discount},
         '${item.discount_reason}', ${item.surcharge}, '${item.surcharge_reason}', 
-        ${item.tax}, '${item.note}', ${item.payment_type}, ${item.table_id})`
+        ${item.tax}, '${item.note}', ${item.payment_type})`
     );
 
     let message = "error in creating order";
     let success = false;
     let id;
-    let table;
     if (result.affectedRows) {
         message = "order created successfully";
         success = true;
         [{ id }] = await db.query(
             "SELECT id FROM orders ORDER BY id DESC LIMIT 0, 1;"
-        );
-        table = await db.query(
-            `UPDATE tables SET status = '1' WHERE tables.id = ${item.table_id}`
         );
     }
 
