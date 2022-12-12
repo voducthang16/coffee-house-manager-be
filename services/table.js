@@ -22,7 +22,22 @@ async function getTableAvailable(page = 1) {
     };
 }
 
+async function changeTableStatus(item) {
+    const result = await db.query(
+        `UPDATE tables SET status = '${item.status}' WHERE id = ${item.tableId}`
+    );
+    let message = "Error in updating table status";
+
+    if (result.affectedRows) {
+        message = "Table status updated successfully";
+    }
+    return {
+        message,
+    };
+}
+
 module.exports = {
     getTable,
     getTableAvailable,
+    changeTableStatus,
 };

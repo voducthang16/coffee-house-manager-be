@@ -20,4 +20,13 @@ router.get("/available", async function (req, res, next) {
     }
 });
 
+router.post("/update-status", async function (req, res, next) {
+    try {
+        res.json(await tableServices.changeTableStatus(req.body));
+    } catch (err) {
+        console.error(`Error while updating table status ${err.message}`);
+        next(err);
+    }
+});
+
 module.exports = router;
