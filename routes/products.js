@@ -1,6 +1,17 @@
 const express = require("express");
 const router = express.Router();
 const productServices = require("../services/product");
+
+// create
+router.post("/", async function (req, res, next) {
+    try {
+        res.json(await productServices.create(req.body));
+    } catch (err) {
+        console.error(`error while creating product`, err.message);
+        next(err);
+    }
+});
+
 // get all
 router.get("/", async function (req, res, next) {
     try {

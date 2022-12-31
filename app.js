@@ -9,13 +9,14 @@ var orderRouter = require("./routes/orders");
 var orderDetailRouter = require("./routes/orders_detail");
 var categoryRouter = require("./routes/category");
 var tableRouter = require("./routes/table");
+const multer = require("multer");
 
 var app = express();
-
+var cors = require("cors");
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
-
+app.options("*", cors());
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
     res.header(
@@ -34,6 +35,25 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, "uploads/");
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + path.extname(file.originalname)); //Appending extension
+    },
+});
+
+const upload = multer({ storage: storage });
+
+app.post("/api/image", upload.single("image"), (req, res) => {
+    if (!req.file) {
+        res.send({ code: 500, msg: "error" });
+    } else {
+        res.send({ code: 200, msg: "upload success", img: req.file.filename });
+    }
+});
 
 app.use("/products", productRouter);
 app.use("/orders", orderRouter);
