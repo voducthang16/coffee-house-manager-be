@@ -21,7 +21,7 @@ async function create(item) {
 async function getAllProducts(page = 1) {
     const offset = helper.getOffset(page, config.listPerPage);
     const rows = await db.query(
-        `SELECT * FROM product LIMIT ${offset}, ${config.listPerPage}`
+        `SELECT category.name as 'category_name', product.* FROM product INNER JOIN category ON product.category_id = category.id LIMIT ${offset}, ${config.listPerPage}`
     );
     const data = helper.emptyOrRows(rows);
     const meta = { page };

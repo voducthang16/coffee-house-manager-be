@@ -36,6 +36,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use(express.static("uploads"));
+app.use("/uploads", express.static("uploads"));
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, "uploads/");
