@@ -21,26 +21,36 @@ async function create(item) {
 async function getAllProducts(page = 1) {
     const offset = helper.getOffset(page, config.listPerPage);
     const rows = await db.query(
-        `SELECT category.name as 'category_name', product.* FROM product INNER JOIN category ON product.category_id = category.id LIMIT ${offset}, ${config.listPerPage}`
+        `SELECT category.name as 'category_name', product.* FROM product INNER JOIN category ON product.category_id = category.id ORDER BY product.id DESC LIMIT ${offset}, ${config.listPerPage}`
     );
+    const totalProduct = await db.query(
+        "SELECT COUNT(*) as 'total' FROM product"
+    );
+    const { total } = totalProduct[0];
     const data = helper.emptyOrRows(rows);
     const meta = { page };
     return {
         data,
         meta,
+        total,
     };
 }
 
 async function getProductsByCategory(page = 1, category_id) {
     const offset = helper.getOffset(page, config.listPerPage);
     const rows = await db.query(
-        `SELECT * FROM product WHERE category_id = ${category_id} LIMIT ${offset}, ${config.listPerPage}`
+        `SELECT * FROM product WHERE category_id = ${category_id} ORDER BY product.id DESC LIMIT ${offset}, ${config.listPerPage}`
     );
+    const totalProduct = await db.query(
+        `SELECT COUNT(*) as 'total' FROM product WHERE category_id = ${category_id}`
+    );
+    const { total } = totalProduct[0];
     const data = helper.emptyOrRows(rows);
     const meta = { page };
     return {
         data,
         meta,
+        total,
     };
 }
 

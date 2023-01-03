@@ -5,7 +5,7 @@ const config = require("../config");
 async function getAllOrders(page = 1) {
     const offset = helper.getOffset(page, config.listPerPage);
     const rows = await db.query(
-        `SELECT * FROM orders LIMIT ${offset}, ${config.listPerPage}`
+        `SELECT * FROM orders LIMIT ORDER BY id DESC ${offset}, ${config.listPerPage}`
     );
     const data = helper.emptyOrRows(rows);
     const meta = { page };
@@ -44,6 +44,10 @@ async function createDetail(item) {
     const result = await db.query(
         `INSERT INTO orders_detail (order_id, product_id, quantity, total) 
         VALUES (${item.order_id}, ${item.product_id}, ${item.quantity}, ${item.total})`
+    );
+
+    const update = await db.query(
+        `UPDATE product SET quantity = quantity - ${item.quantity}, sold = sold + ${item.quantity} WHERE id = ${item.product_id}`
     );
 
     let message = "error in creating order detail";

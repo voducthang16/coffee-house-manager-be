@@ -9,6 +9,7 @@ var orderRouter = require("./routes/orders");
 var orderDetailRouter = require("./routes/orders_detail");
 var categoryRouter = require("./routes/category");
 var tableRouter = require("./routes/table");
+var couponRouter = require("./routes/coupon");
 const multer = require("multer");
 
 var app = express();
@@ -62,6 +63,7 @@ app.use("/orders", orderRouter);
 app.use("/orders-detail", orderDetailRouter);
 app.use("/category", categoryRouter);
 app.use("/table", tableRouter);
+app.use("/coupon", couponRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
