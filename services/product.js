@@ -36,6 +36,24 @@ async function getAllProducts(page = 1) {
     };
 }
 
+async function searchProduct(item, page = 1) {
+    const offset = helper.getOffset(page, config.listPerPage);
+    const rows = await db.query(
+        `SELECT * FROM product WHERE name LIKE '%${item.name}%'`
+    );
+    const totalProduct = await db.query(
+        "SELECT COUNT(*) as 'total' FROM product"
+    );
+    const { total } = totalProduct[0];
+    const data = helper.emptyOrRows(rows);
+    const meta = { page };
+    return {
+        data,
+        meta,
+        total,
+    };
+}
+
 async function getProductsByCategory(page = 1, category_id) {
     const offset = helper.getOffset(page, config.listPerPage);
     const rows = await db.query(
@@ -58,4 +76,5 @@ module.exports = {
     create,
     getAllProducts,
     getProductsByCategory,
+    searchProduct,
 };

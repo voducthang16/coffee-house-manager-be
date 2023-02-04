@@ -36,4 +36,13 @@ router.get("/category/:id", async function (req, res, next) {
     }
 });
 
+router.post("/search", async function (req, res, next) {
+    try {
+        res.json(await productServices.searchProduct(req.body));
+    } catch (err) {
+        console.error(`error while search product`, err.message);
+        next(err);
+    }
+});
+
 module.exports = router;
